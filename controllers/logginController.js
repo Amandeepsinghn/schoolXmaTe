@@ -16,7 +16,7 @@ const signUp = async (req, res) => {
 
       userToSave = {
         email: email,
-        password: password,
+        password: hash,
       };
 
       await user.insertOne(userToSave);
@@ -30,4 +30,8 @@ const signUp = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+module.exports = {
+  signUp: signUp,
 };

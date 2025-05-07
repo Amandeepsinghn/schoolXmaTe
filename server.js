@@ -4,10 +4,14 @@ const { connectDb } = require("./config/db");
 const cors = require("cors");
 const app = express();
 
-app.use(express.json());
-app.options("*", cors());
-
 connectDb();
+
+app.use(express.json());
+app.use(cors());
 
 // Defining routes
 const authRoutes = require("./routes/auth");
+
+app.use("/api", authRoutes);
+
+app.listen(3000);
