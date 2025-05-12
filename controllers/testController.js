@@ -24,3 +24,7 @@ const testData = async (req, res) => {
 module.exports = {
   testData,
 };
+
+const generateCourse = async (req, res) => {
+  const userid = req.user;
+};

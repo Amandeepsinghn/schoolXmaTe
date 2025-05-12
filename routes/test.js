@@ -5,4 +5,6 @@ const { testData } = require("../controllers/testController");
 
 router.get("/data", auth, testData);
 
+router.post("/testGenerate",auth)
+
 module.exports = router;
