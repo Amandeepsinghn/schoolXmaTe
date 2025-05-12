@@ -7,7 +7,7 @@ const saltRounds = 2;
 const signUp = async (req, res) => {
   const { email, password } = req.body;
   try {
-    bcyrpt.hash(password, saltRounds, async function (err, hash) {
+    bcrypt.hash(password, saltRounds, async function (err, hash) {
       if (err) {
         return res.status(400).json({
           message: "Internal server error",
@@ -48,12 +48,7 @@ const logIn = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-
-    const token = jwt.sign(
-      { id: User._id, email: User.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ id: User._id, email: User.email }, process.env.JWT_SECRET, { expiresIn: "24h" });
 
     res.status(200).json({
       token,
