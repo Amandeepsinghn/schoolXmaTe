@@ -3,9 +3,15 @@ const { history } = require("../models/history");
 
 const getAllHistory = async (req, res) => {
   try {
-    const histories = await history.find()
-      .populate('userId', 'name email')
-      .populate('testId', 'title');   
+  
+    const userId = req.user;
+    console.log(userId);
+    
+    const histories = await history.find({ userId: userId })
+      .populate('testId', 'title') 
+      .populate('userId', 'name email'); 
+
+    res.status(200).json(histories);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

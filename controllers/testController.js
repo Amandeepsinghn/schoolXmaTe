@@ -3,9 +3,9 @@ const { test } = require("../models/test");
 
 const testData = async (req, res) => {
   try {
-    const userid = req.user;
+    const userId = req.user;
 
-    const response = await test.find({ userId: userid });
+    const response = await test.find({ userId: userId });
 
     if (!response) {
       return res.status(500).json({

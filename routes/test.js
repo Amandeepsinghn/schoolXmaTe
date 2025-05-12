@@ -6,3 +6,9 @@ const { testData } = require("../controllers/testController");
 router.get("/data", auth, testData);
 
 module.exports = router;
+
+
+
+
+
+
