@@ -1,27 +1,32 @@
-const { verifyToken } = require("../utils/token");
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
 const auth = (req, res, next) => {
-  const token = req.header("Token");
+  let token = req.header("Token");
 
   if (!token) {
-    return res.status(401).json({
-      message: "Access denied",
-    });
+    return res.status(401).json({ message: "Access denied" });
+  }
+
+  if (token.toLowerCase().startsWith("bearer ")) {
+    token = token.slice(7).trim();
+  } else {
+    token = token.trim();
   }
 
   try {
-    const decoded = verifyToken(token);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!decoded) {
       return res.status(401).json({ message: "Invalid token" });
     }
+
     req.user = decoded.id;
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Token verfication failed" });
+    console.error("Token verification failed:", error.message);
+    return res.status(401).json({ message: "Token verification failed" });
   }
 };
 
-module.exports = {
-  auth,
-};
+module.exports = { auth };

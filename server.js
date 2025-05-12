@@ -12,8 +12,10 @@ app.use(cors());
 // Defining routes
 const authRoutes = require("./routes/auth");
 const testRoutes = require("./routes/test");
+const historyRoutes = require("./routes/history.route");
 
 app.use("/api", authRoutes);
 app.use("/api/test", testRoutes);
+app.use("/api/hist", historyRoutes);
 
 app.listen(3000);

@@ -1,6 +1,6 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const bcyrpt = require("bcrypt");
+const bcrypt = require("bcrypt");
 const { user } = require("../models/user");
 const saltRounds = 2;
 
@@ -36,28 +36,31 @@ const logIn = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const User = await user.findOne({
-      email,
-    });
+    const User = await user.findOne({ email });
 
     if (!User) {
-      res.status(400).json({ message: "User not found" });
+      return res.status(400).json({ message: "User not found" });
     }
 
-    const isMatch = await bcyrpt.compare(password, User.password);
+    const isMatch = await bcrypt.compare(password, User.password);
 
     if (!isMatch) {
-      return res.status(400).json({
-        message: "Invalid credentials",
-      });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ id: User._id }, process.env.JWT_SECRET);
 
-    console.log(process.env.JWT_SECRET);
+    const token = jwt.sign(
+      { id: User._id, email: User.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     res.status(200).json({
-      token: token,
+      token,
+      user: {
+        id: User._id,
+        email: User.email,
+      },
     });
   } catch (error) {
     console.log("Login Error", error);
