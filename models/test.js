@@ -10,8 +10,6 @@ const testSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const test = mongoose.model("test", testSchema);
 
-module.exports = {
-  test: test,
-};
+
+module.exports = mongoose.model('test', testSchema);
