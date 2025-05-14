@@ -1,6 +1,6 @@
 require("dotenv").config();
-const test = require('../models/test');
-const TestAttempt = require('../models/testAttempt');
+const test = require("../models/test");
+const TestAttempt = require("../models/testAttempt");
 const { testGeneration } = require("../utils/testGeneration");
 
 const testData = async (req, res) => {
@@ -35,25 +35,25 @@ const genTest = async (req, res) => {
     }
 
     const testData = await testGeneration(subject, title, difficulty);
-console.log("testData", testData);
+    console.log("testData", testData);
     const newTitle = testData.title;
 
     // Transform options to be a single object
-  const questionData = testData.questions.map((question, index) => {
-  // Ensure options exist and are structured correctly
-  const options = question.options && question.options[0] ? question.options[0] : {};
-  return {
-    questionId: `q${index + 1}`, // Generate unique questionId
-    question: question.question,
-    options: {
-      A: options.A || "Option A",
-      B: options.B || "Option B",
-      C: options.C || "Option C",
-      D: options.D || "Option D",
-    },
-    correct_option: question.correct_option,
-  };
-});
+    const questionData = testData.questions.map((question, index) => {
+      // Ensure options exist and are structured correctly
+      const options = question.options && question.options[0] ? question.options[0] : {};
+      return {
+        questionId: `q${index + 1}`, // Generate unique questionId
+        question: question.question,
+        options: {
+          A: options.A || "Option A",
+          B: options.B || "Option B",
+          C: options.C || "Option C",
+          D: options.D || "Option D",
+        },
+        correct_option: question.correct_option,
+      };
+    });
     await test.insertMany({
       title: newTitle,
       seriesData: questionData,
@@ -184,7 +184,6 @@ const finalSubmit = async (req, res) => {
       return res.status(400).json({ message: "Test is already completed" });
     }
 
-    
     attempt.isCompleted = true;
     attempt.updatedAt = new Date();
 
