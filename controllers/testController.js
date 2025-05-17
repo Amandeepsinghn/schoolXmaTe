@@ -2,7 +2,7 @@ require("dotenv").config();
 const test = require("../models/test");
 const TestAttempt = require("../models/testAttempt");
 const { testGeneration } = require("../utils/testGeneration");
-
+const mongoose = require("mongoose");
 const testData = async (req, res) => {
   try {
     const userId = req.user;
@@ -196,6 +196,27 @@ const finalSubmit = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+  const getTestById = async (req, res) => {
+  try {
+    const { testId } = req.params;
+
+    // Check if testId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(testId)) {
+      return res.status(400).json({ error: 'Invalid test ID' });
+    }
+
+    const foundTest = await test.findById(testId);
+
+    if (!foundTest) {
+      return res.status(404).json({ error: 'Test not found' });
+    }
+
+    res.status(200).json(foundTest);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = {
   startTest,
   submitAnswer,
@@ -203,4 +224,5 @@ module.exports = {
   testData,
   genTest,
   finalSubmit,
+  getTestById
 };
