@@ -11,13 +11,14 @@ const getTests = async (req, res) => {
 
     const query = {
       userId: new mongoose.Types.ObjectId(userId),
-      title: { $regex: search, $options: 'i' } // Case-insensitive search
+      title: { $regex: search, $options: 'i' } 
+
     };
 
     const total = await test.countDocuments(query);
 
     const tests = await test.find(query)
-      .select('title createdAt -_id') // Only return title and date
+      .select('title createdAt') // Only return title and date
       .sort({ createdAt: -1 })        // Latest first
       .skip((page - 1) * limit)
       .limit(limit);
